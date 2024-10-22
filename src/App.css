@@ -1,38 +1,115 @@
-.App {
-  text-align: center;
+/* Asegurar que el body y root ocupen toda la altura de la ventana */
+#root,
+body,
+html {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.page-content {
+    flex: 1;
+    /* El contenido de la página se expande y ocupa el espacio restante */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    /* Padding interno para espaciado */
+    box-sizing: border-box;
+    /* Incluir padding en el tamaño total */
+    max-width: 100%;
+    /* Prevenir que el contenido sobrepase el ancho del contenedor */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.app-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    /* Prevenir crecimiento inesperado */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.footer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
 }
 
-.App-link {
-  color: #61dafb;
+.container-home {
+    display: flex;
+    flex-wrap: wrap;
+    /* Permite que los Gauges se acomoden en varias filas si no caben */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.gauge-item {
+    flex: 1 1 150px;
+    /* Cada Gauge tendrá un tamaño mínimo de 300px y se ajustará según el espacio disponible */
+    margin: 1rem;
+
+    background-color: white; /* Fondo blanco para contraste */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 1rem;
+    width: 300px; /* Tamaño fijo de la tarjeta */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease; /* Animación para hover */
 }
+
+.gauge-item:hover {
+    transform: translateY(-5px); /* Efecto sutil de hover para destacar */
+}
+
+.gauge-item h3 {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.gauge-item p {
+    margin: 0.5rem 0;
+    color: #777;
+}
+
+.gauge-btn {
+    margin-top: 1rem;
+    background-color: white;
+    color: #333;
+    border: 2px solid #333;
+    padding: 0.5em 1.2em;
+    font-size: 1em;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+.gauge-btn:hover {
+    background-color: #333;
+    color: white;
+    border: 2px solid white;
+}
+
+
+@media (max-width: 1099px) {
+    #root{
+        height: auto;
+    }
+
+    .page-content {
+        min-height: 85vh;
+    }
+
+    .gauge-card {
+        width: 100%; /* Ocupa el ancho completo en pantallas pequeñas */
+    }
+
+}
+
