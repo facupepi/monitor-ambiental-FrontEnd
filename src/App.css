@@ -37,46 +37,53 @@ html {
     border-top: 1px solid #e9ecef;
 }
 
-.container-home {
+.container {
     display: flex;
     flex-wrap: wrap;
     /* Permite que los Gauges se acomoden en varias filas si no caben */
 }
 
-.gauge-item {
+.item {
     flex: 1 1 150px;
     /* Cada Gauge tendrá un tamaño mínimo de 300px y se ajustará según el espacio disponible */
-    margin: 1rem;
-
+    margin: 0.2rem;
+    font-size: smaller;
     background-color: white; /* Fondo blanco para contraste */
     border-radius: 10px; /* Bordes redondeados */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    padding: 1rem;
-    width: 300px; /* Tamaño fijo de la tarjeta */
+    padding: 0.4rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     transition: transform 0.3s ease; /* Animación para hover */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.gauge-item:hover {
+.item .btn {
+    margin-top: 10px;
+}
+
+.item:hover {
     transform: translateY(-5px); /* Efecto sutil de hover para destacar */
 }
 
-.gauge-item h3 {
-    margin-top: 1rem;
+.item h3 {
+    margin-top: 1.5rem;
     font-size: 1.2rem;
     font-weight: bold;
     color: #333;
 }
 
-.gauge-item p {
-    margin: 0.5rem 0;
+.item p {
+    font-size: 1rem;
     color: #777;
 }
 
-.gauge-btn {
+.btn {
     margin-top: 1rem;
     background-color: white;
     color: #333;
@@ -91,25 +98,135 @@ html {
     text-decoration: none;
 }
 
-.gauge-btn:hover {
+.btn:hover {
     background-color: #333;
     color: white;
     border: 2px solid white;
 }
 
 
-@media (max-width: 1099px) {
+/* Estilos para el contenedor principal */
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Estilos para las dos columnas */
+.column-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Estilos para la columna izquierda */
+.left-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.home-header {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.home-header h1 {
+    font-size: 2rem;
+    color: #333;
+}
+
+.home-header p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.call-to-action-section {
+    background-color: #333;
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.call-to-action-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.call-to-action-section p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+/* Estilos para la columna derecha */
+.right-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.centrales-section {
+    text-align: left;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.centrales-section h2 {
+    font-size: 2rem;
+    color: #333;
+}
+
+.centrales-section p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.centrales-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+
+/* Responsiveness */
+
+
+@media (max-width: 1250px) {
     #root{
         height: auto;
     }
 
     .page-content {
-        min-height: 85vh;
+        min-height: 90vh;
     }
 
     .gauge-card {
         width: 100%; /* Ocupa el ancho completo en pantallas pequeñas */
     }
 
+    .column-container {
+        flex-direction: column;
+    }
+
+    .left-column, .right-column {
+        width: 100%;
+    }
 }
 

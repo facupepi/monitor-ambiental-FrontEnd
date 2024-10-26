@@ -3,7 +3,7 @@ import React from 'react';
 function About() {
     return (
         <div>
-            <h1>About</h1>
+            <h1>Acerca De</h1>
             <p>
                 El monóxido de carbono (CO) es un gas tóxico, incoloro e inodoro que se produce como resultado de una combustión incompleta de combustibles fósiles como gasolina, madera, gas propano, gas natural y otros. Debido a la ausencia de características perceptibles, su acumulación en espacios cerrados puede provocar intoxicación, asfixia y, en casos severos, la muerte. Este riesgo es particularmente elevado en hogares donde se utilizan dispositivos de gas como estufas, calefones o calentadores que no reciben un mantenimiento adecuado.
                 

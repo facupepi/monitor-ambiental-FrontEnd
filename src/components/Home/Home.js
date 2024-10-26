@@ -1,42 +1,62 @@
 import { Link } from "react-router-dom";
-import Gauge from "../Gauge/Gauje";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+const requestOptions = {
+    method: "GET",
+    redirect: "follow"
+};
 
 function Home() {
+
+    const [centrales, setCentrales] = useState([]);
+
+    useEffect(() => {
+        fetch("https://monitor-de-gases-back.onrender.com/stations", requestOptions)
+        .then((response) => response.json())
+        .then((result) => setCentrales(result))
+        .catch((error) => console.error(error));
+    },[]);
+
     return (
-    <div className="container-home">
-        <div className="gauge-item">
-            <Gauge ckey={0} value = {90} min = {0}  max = {100} label = 'Temperatura' units = 'ºC' colorMin = "#cefcdd" colorMax = "#05f654" />
-            <Link to="/readings/Temperatura" className="gauge-btn">Ver Detalles</Link>
-        </div>
+        <div className="home-container">
+            <div className="column-container">
+                {/* Columna 1: Header y Call to Action */}
+                <div className="left-column">
+                    <header className="home-header">
+                        <h1>Bienvenido a la Plataforma de Monitoreo de Gases</h1>
+                        <p>Controla y monitorea en tiempo real las condiciones ambientales de tu hogar. Protege a tu familia de gases peligrosos y mantén el control total desde una única plataforma.</p>
+                        <Link to="/about" className="btn">Conoce más</Link>
+                    </header>
 
-        <div className="gauge-item">
-            <Gauge key={1} value = {30} min = {0}  max = {100} label = 'Humedad' units = '%' colorMin = "#b7d8f9" colorMax = "#0077ee" />
-            <Link to="/readings/Humedad" className="gauge-btn">Ver Detalles</Link>
-        </div>
+                    <section className="call-to-action-section">
+                        <h2>¡Mantente Seguro!</h2>
+                        <p>No dejes tu seguridad al azar. Comienza a monitorear tus espacios hoy mismo y recibe alertas en tiempo real.</p>
+                        <Link to="/contact" className="btn">Contáctanos para más información</Link>
+                    </section>
+                </div>
 
-        <div className="gauge-item">
-            <Gauge key={2} value = {30} min = {0}  max = {100} label = 'Monoxido(CO)' units = 'Particulas por Millon' colorMin = "#b0b0af" colorMax = "#303030" />
-            <Link to="/readings/Monoxido" className="gauge-btn">Ver Detalles</Link>
-        </div>
+                {/* Columna 2: Centrales */}
+                <div className="right-column">
+                    <section className="centrales-section">
+                        <h2>Nuestras Centrales de Monitoreo</h2>
+                        <p>Selecciona una central para ver los detalles de las lecturas en tiempo real.</p>
 
-        <div className="gauge-item">
-            <Gauge key={3} value = {30} min = {0}  max = {100} label = 'Alcohol' units = 'Particulas por Millon' colorMin = "#ffdcfd" colorMax = "#ff05f1" />
-            <Link to="/readings/Alcohol" className="gauge-btn">Ver Detalles</Link>
+                        <div className="centrales-list">
+                            { centrales.length !== 0 ? 
+                                centrales.map((central) => (
+                                <div key={central.id} className="item">
+                                    <h3>{central.name}</h3>
+                                    <p>Ubicación: {central.location}</p>
+                                    <Link to={`/central/${central.id}/${central.name}/${central.location}`} className="btn">Ver Detalles</Link>
+                                </div>
+                            ))
+                            : <p>Cargando centrales...</p>  }
+                        </div>
+                    </section>
+                </div>
+            </div>
         </div>
-
-        <div className="gauge-item">
-            <Gauge key={4} value = {100} min = {0}  max = {100} label = 'Metano' units = 'Particulas por Millon' colorMin = "#fdc4c4" colorMax = "#ff0000" />
-            <Link to="/readings/Metano" className="gauge-btn">Ver Detalles</Link>
-        </div>
-
-        <div className="gauge-item">
-            <Gauge key={5} value = {90} min = {0}  max = {100} label = 'Butano' units = 'Particulas por Millon' colorMin = "#03fffb" colorMax = "#068080" />
-            <Link to="/readings/Butano" className="gauge-btn">Ver Detalles</Link>
-        </div>
-        
-    </div>
-    )
+    );
 }
 
 export default Home;

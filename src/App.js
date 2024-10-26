@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './App.css';
 import Readings from "./components/Readings/Readings";
+import Central from "./components/Central/Central";
 
 function App() {
   return (
@@ -20,9 +21,10 @@ function App() {
           <div className="page-content">
             <Routes>
                 <Route path="/" element={<Home/>} />
+                <Route path="/central/:id/:name/:location/readings/:type" element={<Readings/>} />
+                <Route path="/central/:id/:name/:location" element={<Central/>} />
                 <Route path="/about" element={<About/>} />
                 <Route path="/contact" element={<Contact/>} />
-                <Route path="/readings/:name" element={<Readings/>} />
             </Routes>
           </div>
 
