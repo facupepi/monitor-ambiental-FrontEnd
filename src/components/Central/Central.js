@@ -1,90 +1,85 @@
-import React, {useEffect, useState} from 'react';
-import {Link, useParams} from 'react-router-dom';
-import Gauge from '../Gauge/Gauge'; // Asegúrate de importar el componente Gauge correctamente
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import Gauge from '../Gauge/Gauge';
 
 const Central = () => {
-    const {id, name, location} = useParams();
-    const [measurements,
-        setMeasurements] = useState([]);
+    const { id, name, location } = useParams();
+    const [measurements, setMeasurements] = useState([]);
+    const [date, setDate] = useState('');
 
-    const [date,
-        setDate] = useState('');
-
-    const requestOptions = {
+    const requestOptions = useMemo(() => ({
         method: "GET",
         redirect: "follow"
-    };
+    }), []);
 
     const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-    const getSimilarColors = () => {
+    const getSimilarColors = useCallback(() => {
         const baseColor = `hsl(${getRandomInt(0, 360)}, ${getRandomInt(50, 100)}%, ${getRandomInt(40, 60)}%)`;
         const similarColor = `hsl(${getRandomInt(0, 360)}, ${getRandomInt(50, 100)}%, ${getRandomInt(20, 40)}%)`;
         return [baseColor, similarColor];
-    };
+    }, []);
 
-    const formatMeasurement = (measurement) => {
+    const formatMeasurement = useCallback((measurement) => {
         let formattedType = measurement.key;
         let units = '';
         let min = 0;
         let max = 100;
-        let key = measurement.key;
 
         switch (formattedType.toLowerCase()) {
             case 'co':
                 formattedType = 'Monóxido de Carbono (CO)';
                 units = 'ppm';
                 min = 0;
-                max = 50; // Valores típicos de seguridad para CO
+                max = 50;
                 break;
             case 'h2':
                 formattedType = 'Hidrógeno (H2)';
                 units = 'ppm';
                 min = 0;
-                max = 1000; // Valores típicos para H2
+                max = 1000;
                 break;
             case 'lpg':
                 formattedType = 'Gas Licuado de Petróleo (LPG)';
                 units = 'ppm';
                 min = 0;
-                max = 1000; // Valores típicos para LPG
+                max = 1000;
                 break;
             case 'alcohol':
                 formattedType = 'Alcohol';
                 units = 'ppm';
                 min = 0;
-                max = 500; // Valores típicos para alcohol
+                max = 500;
                 break;
             case 'ch4':
                 formattedType = 'Metano';
                 units = 'ppm';
                 min = 0;
-                max = 500; // Valores típicos para alcohol
+                max = 500;
                 break;
             case 'propane':
                 formattedType = 'Propano';
                 units = 'ppm';
                 min = 0;
-                max = 1000; // Valores típicos para propano
+                max = 1000;
                 break;
             case 'temperature':
                 formattedType = 'Temperatura';
                 units = 'ºC';
                 min = -10;
-                max = 50; // Rango típico de temperatura
+                max = 50;
                 break;
             case 'humidity':
                 formattedType = 'Humedad';
                 units = '%';
                 min = 0;
-                max = 100; // Rango típico de humedad
+                max = 100;
                 break;
             default:
                 units = '';
         }
 
-        const [colorMin,
-            colorMax] = getSimilarColors();
+        const [colorMin, colorMax] = getSimilarColors();
 
         return {
             type: formattedType,
@@ -95,9 +90,9 @@ const Central = () => {
             colorMax: colorMax,
             min: min,
             max: max,
-            key: key
+            key: measurement.key
         };
-    };
+    }, [getSimilarColors]);
 
     useEffect(() => {
         const fetchData = () => {
@@ -109,24 +104,18 @@ const Central = () => {
                         if (central) {
                             const filteredMeasurements = [];
 
-                            // Iterar sobre los tipos de mediciones de la central específica
-                            Object
-                                .keys(central)
-                                .forEach(key => {
-                                    if (Array.isArray(central[key])) {
-                                        central[key].forEach(measurement => {
-                                            filteredMeasurements.push(formatMeasurement({
-                                                ...measurement,
-                                                key
-                                            }));
-                                        });
-                                    }
-                                });
-                            let dateNow = new Date().toLocaleString("es-AR", {
+                            Object.keys(central).forEach(key => {
+                                if (Array.isArray(central[key])) {
+                                    central[key].forEach(measurement => {
+                                        filteredMeasurements.push(formatMeasurement({ ...measurement, key }));
+                                    });
+                                }
+                            });
+                            const dateNow = new Date().toLocaleString("es-AR", {
                                 timeZone: "America/Argentina/Buenos_Aires",
                                 hour12: false
                             });
-                            setDate(dateNow)
+                            setDate(dateNow);
                             setMeasurements(filteredMeasurements);
                         }
                     }
@@ -134,11 +123,11 @@ const Central = () => {
                 .catch(error => console.error(error));
         };
 
-        fetchData(); // Fetch data initially
-        const interval = setInterval(fetchData, 3000); // Fetch data every 3 seconds
+        fetchData();
+        const interval = setInterval(fetchData, 3000);
 
-        return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, [id, formatMeasurement, requestOptions]);
+        return () => clearInterval(interval);
+    }, [id, requestOptions, formatMeasurement]);
 
     if (measurements.length === 0) {
         return (
@@ -150,20 +139,17 @@ const Central = () => {
                     <div className="circle"></div>
                 </div>
             </div>
-        )
+        );
     }
 
-    else return (
+    return (
         <div className="container">
             <div className="central-container">
                 <h1>{name}</h1>
-                {measurements.length > 0
-                    ? <div>
-                            <p><strong>Última actualización:</strong> {date}</p>
-                            <p><strong>Ubicación:</strong> {location}</p>
-                        </div>
-                    : null
-}
+                <div>
+                    <p><strong>Última actualización:</strong> {date}</p>
+                    <p><strong>Ubicación:</strong> {location}</p>
+                </div>
 
                 <div className="container">
                     {measurements.map((measurement) => (
@@ -176,17 +162,20 @@ const Central = () => {
                                 label={measurement.type}
                                 units={measurement.units}
                                 colorMin={measurement.colorMin}
-                                colorMax={measurement.colorMax}/>
+                                colorMax={measurement.colorMax}
+                            />
                             <Link
                                 to={`/central/${id}/${name}/${location}/readings/${measurement.key}`}
-                                className="btn">Ver Detalles</Link>
+                                className="btn"
+                            >
+                                Ver Detalles
+                            </Link>
                         </div>
-                    ))
-}
+                    ))}
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default Central;
