@@ -32,9 +32,7 @@ function About() {
                     <strong>Interfaz Web Interactiva:</strong> Una aplicación web creada con React permite a los usuarios visualizar los datos de manera intuitiva y recibir notificaciones sobre el estado actual del entorno.
                 </li>
             </ul>
-            <p>
-                En conjunto, este proyecto ofrece una solución tecnológica que no solo mide y alerta sobre la presencia de gases peligrosos, sino que también contribuye al confort y seguridad de los hogares e instalaciones industriales, permitiendo prevenir riesgos y promover un ambiente más seguro.
-            </p>
+
         </div>
     );
 }
