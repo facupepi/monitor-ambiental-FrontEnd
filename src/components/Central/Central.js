@@ -138,7 +138,7 @@ const Central = () => {
         const interval = setInterval(fetchData, 3000); // Fetch data every 3 seconds
 
         return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, [id]);
+    }, [id, formatMeasurement, requestOptions]);
 
     if (measurements.length === 0) {
         return (

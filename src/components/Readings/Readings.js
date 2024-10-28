@@ -48,7 +48,7 @@ const Readings = () => {
                 setUnit(getUnit(type));
             })
             .catch((error) => console.error(error));
-    }, [id, type]);
+    }, [id, type, requestOptions]);
 
     if (data.length === 0) {
         return (
