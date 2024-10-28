@@ -46,11 +46,19 @@ function Home() {
                                 centrales.map((central) => (
                                 <div key={central.id} className="item">
                                     <h3>{central.name}</h3>
-                                    <p>Ubicación: {central.location}</p>
+                                    <p> <strong>Ubicación:</strong> {central.location}</p>
                                     <Link to={`/central/${central.id}/${central.name}/${central.location}`} className="btn">Ver Detalles</Link>
                                 </div>
                             ))
-                            : <p>Cargando centrales...</p>  }
+                            :  <div className='loader-container'>
+                                    <div className="loader">
+                                        <div className="circle"></div>
+                                        <div className="circle"></div>
+                                        <div className="circle"></div>
+                                        <div className="circle"></div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </section>
                 </div>

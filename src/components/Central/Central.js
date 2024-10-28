@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link, useParams} from 'react-router-dom';
 import Gauge from '../Gauge/Gauge'; // Asegúrate de importar el componente Gauge correctamente
 
 const Central = () => {
-    const { id, name, location } = useParams();
-    const [measurements, setMeasurements] = useState([]);
+    const {id, name, location} = useParams();
+    const [measurements,
+        setMeasurements] = useState([]);
 
-    const [date, setDate] = useState('');
+    const [date,
+        setDate] = useState('');
 
     const requestOptions = {
         method: "GET",
@@ -81,7 +83,8 @@ const Central = () => {
                 units = '';
         }
 
-        const [colorMin, colorMax] = getSimilarColors();
+        const [colorMin,
+            colorMax] = getSimilarColors();
 
         return {
             type: formattedType,
@@ -107,14 +110,22 @@ const Central = () => {
                             const filteredMeasurements = [];
 
                             // Iterar sobre los tipos de mediciones de la central específica
-                            Object.keys(central).forEach(key => {
-                                if (Array.isArray(central[key])) {
-                                    central[key].forEach(measurement => {
-                                        filteredMeasurements.push(formatMeasurement({ ...measurement, key }));
-                                    });
-                                }
+                            Object
+                                .keys(central)
+                                .forEach(key => {
+                                    if (Array.isArray(central[key])) {
+                                        central[key].forEach(measurement => {
+                                            filteredMeasurements.push(formatMeasurement({
+                                                ...measurement,
+                                                key
+                                            }));
+                                        });
+                                    }
+                                });
+                            let dateNow = new Date().toLocaleString("es-AR", {
+                                timeZone: "America/Argentina/Buenos_Aires",
+                                hour12: false
                             });
-                            let dateNow = new Date().toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" , hour12: false});
                             setDate(dateNow)
                             setMeasurements(filteredMeasurements);
                         }
@@ -129,40 +140,50 @@ const Central = () => {
         return () => clearInterval(interval); // Cleanup interval on component unmount
     }, [id]);
 
-    return (
+    if (measurements.length === 0) {
+        return (
+            <div className='loader-container'>
+                <div className="loader">
+                    <div className="circle"></div>
+                    <div className="circle"></div>
+                    <div className="circle"></div>
+                    <div className="circle"></div>
+                </div>
+            </div>
+        )
+    }
+
+    else return (
         <div className="container">
             <div className="central-container">
                 <h1>{name}</h1>
-                {
-                    measurements.length > 0 ? 
-                        <div>
-                            <p>Última actualización: {date}</p> 
-                            <p>Ubicación: {location}</p>
+                {measurements.length > 0
+                    ? <div>
+                            <p><strong>Última actualización:</strong> {date}</p>
+                            <p><strong>Ubicación:</strong> {location}</p>
                         </div>
                     : null
-                }
+}
 
                 <div className="container">
-                    {
-                        measurements.length > 0 ?
-                        measurements.map((measurement) => (
-                            <div key={measurement.type} className="item">
-                                <Gauge 
-                                    key={measurement.type} 
-                                    value={measurement.value} 
-                                    min={measurement.min} 
-                                    max={measurement.max} 
-                                    label={measurement.type} 
-                                    units={measurement.units} 
-                                    colorMin={measurement.colorMin} 
-                                    colorMax={measurement.colorMax} 
-                                />
-                                <Link to={`/central/${id}/${name}/${location}/readings/${measurement.key}`} className="btn">Ver Detalles</Link>
-                            </div>
-                        ))
-                        : <p>Cargando información de la central...</p>
-                    }
-                </div>            
+                    {measurements.map((measurement) => (
+                        <div key={measurement.type} className="item">
+                            <Gauge
+                                key={measurement.type}
+                                value={measurement.value}
+                                min={measurement.min}
+                                max={measurement.max}
+                                label={measurement.type}
+                                units={measurement.units}
+                                colorMin={measurement.colorMin}
+                                colorMax={measurement.colorMax}/>
+                            <Link
+                                to={`/central/${id}/${name}/${location}/readings/${measurement.key}`}
+                                className="btn">Ver Detalles</Link>
+                        </div>
+                    ))
+}
+                </div>
             </div>
         </div>
     );

@@ -50,7 +50,20 @@ const Readings = () => {
             .catch((error) => console.error(error));
     }, [id, type]);
 
-    return (
+    if (data.length === 0) {
+        return (
+            <div className='loader-container'>
+                <div className="loader">
+                    <div className="circle"></div>
+                    <div className="circle"></div>
+                    <div className="circle"></div>
+                    <div className="circle"></div>
+                </div>
+            </div>
+        )
+    }
+
+    else return (
         <div>
             <h1>Lecturas de {type} para {name} en {location}</h1>
             <ResponsiveContainer width="100%" height={300}>
