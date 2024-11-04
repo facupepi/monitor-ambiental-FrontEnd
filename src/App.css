@@ -47,7 +47,7 @@ html {
 .item {
     flex: 1 1 150px;
     /* Cada Gauge tendrá un tamaño mínimo de 300px y se ajustará según el espacio disponible */
-    margin: 0.2rem;
+    margin: 0.1rem;
     background-color: white;
     /* Fondo blanco para contraste */
     border-radius: 10px;
