@@ -48,7 +48,6 @@ html {
     flex: 1 1 150px;
     /* Cada Gauge tendrá un tamaño mínimo de 300px y se ajustará según el espacio disponible */
     margin: 0.2rem;
-    font-size: smaller;
     background-color: white;
     /* Fondo blanco para contraste */
     border-radius: 10px;
@@ -56,10 +55,6 @@ html {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     /* Sombra suave */
     padding: 0.4rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     transition: transform 0.3s ease;
     /* Animación para hover */
     display: flex;
@@ -215,14 +210,22 @@ html {
     min-height: 200px;
 }
 
+.container-readings{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
 /* Responsiveness */
-@media (max-width: 1250px) {
+@media (max-width: 1399px) or (max-height: 725px) {
     #root {
         height: auto;
     }
 
     .page-content {
-        min-height: 90vh;
+        min-height: 87vh;
     }
 
     .gauge-card {

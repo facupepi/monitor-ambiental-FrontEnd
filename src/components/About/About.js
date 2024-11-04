@@ -5,7 +5,7 @@ function About() {
         <div>
             <h1>Acerca De</h1>
             <p>
-                La presencia de gases peligrosos en entornos domésticos e industriales representa un riesgo significativo para la salud y seguridad de las personas. Gases como el monóxido de carbono (CO), hidrógeno (H₂), propano, gas licuado de petróleo (LPG), metano (CH₄), y vapores de alcohol pueden estar presentes en concentraciones que, aunque imperceptibles al sentido humano, resultan tóxicas o inflamables.
+                La presencia de gases peligrosos en entornos domésticos representa un riesgo significativo para la salud y seguridad de las personas. Gases como el monóxido de carbono (CO), hidrógeno (H₂), propano, gas licuado de petróleo (LPG), metano (CH₄), y vapores de alcohol pueden estar presentes en concentraciones que, aunque imperceptibles al sentido humano, resultan tóxicas o inflamables.
             </p>
             <p>
                 El monóxido de carbono, en particular, es un gas incoloro e inodoro que se produce por una combustión incompleta de combustibles fósiles, como gas natural, gasolina y madera. Su acumulación en espacios cerrados, como viviendas mal ventiladas, puede causar intoxicación, asfixia e incluso la muerte. Por otro lado, el gas natural, compuesto principalmente de metano y otros hidrocarburos como el butano, es ampliamente utilizado en hogares y en entornos industriales para calefacción y cocción. Las fallas en equipos o una ventilación inadecuada en el sistema de combustión pueden originar fugas, representando un riesgo de incendio o explosión.

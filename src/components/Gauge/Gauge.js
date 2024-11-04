@@ -51,7 +51,7 @@ const Gauge = ({ value = 25, min = 0, max = 100, label = 'ABCDEFG', units = 'Uni
 
     return (
         <div style={{ textAlign: "center" }}>
-            <svg style={{ overflow: "visible" }} width="10rem" viewBox={[-1, -1, 2, 1].join(" ")}>
+            <svg style={{ overflow: "visible" }} width="8rem" viewBox={[-1, -1, 2, 1].join(" ")}>
                 
                 {/* Definimos un gradiente único usando el id dinámico */}
                 <defs>
@@ -83,11 +83,11 @@ const Gauge = ({ value = 25, min = 0, max = 100, label = 'ABCDEFG', units = 'Uni
             </svg>
 
             <div style={{ color: `${colorScale(percent)}` }}>
-                <div style={{ marginTop: "0.4em", fontSize: "4em", lineHeight: "1em", fontWeight: "900", fontFeatureSettings: "'zero', 'tnum' 1" }}>
+                <div style={{ marginTop: "1em", fontSize: "2em", lineHeight: "1em", fontWeight: "900", fontFeatureSettings: "'zero', 'tnum' 1" }}>
                     {format(",")(value)}
                 </div>
                 {!!label && (
-                    <div style={{ marginTop: "0.6em", fontSize: "1.5em", lineHeight: "1.3em", fontWeight: "700" }}>
+                    <div style={{ marginTop: "0.6em", fontSize: "1.3em", lineHeight: "1.3em", fontWeight: "700" }}>
                         {label}
                     </div>
                 )}

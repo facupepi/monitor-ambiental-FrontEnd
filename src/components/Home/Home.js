@@ -23,8 +23,8 @@ function Home() {
                 {/* Columna 1: Header y Call to Action */}
                 <div className="left-column">
                     <header className="home-header">
-                        <h1>Bienvenido a la Plataforma de Monitoreo de Gases</h1>
-                        <p>Controla y monitorea en tiempo real las condiciones ambientales de tu hogar. Protege a tu familia de gases peligrosos y mantén el control total desde una única plataforma.</p>
+                        <h1>Bienvenido a la Plataforma de Monitoreo Ambiental</h1>
+                        <p>Controla y monitorea en tiempo real las condiciones  de tu hogar. Protege a tu familia de gases peligrosos y mantén el control total desde una única plataforma.</p>
                         <Link to="/about" className="btn">Conoce más</Link>
                     </header>
 
