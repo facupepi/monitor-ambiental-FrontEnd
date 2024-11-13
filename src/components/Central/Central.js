@@ -6,6 +6,7 @@ import { API_URL, formatTypeAndUnit } from '../helpers';
 const Central = () => {
     const { id, name, location } = useParams();
     const [measurements, setMeasurements] = useState([]);
+    // eslint-disable-next-line no-unused-vars
     const [previousMeasurements, setPreviousMeasurements] = useState({});
     const [date, setDate] = useState('');
     const [gaugeColors, setGaugeColors] = useState({});

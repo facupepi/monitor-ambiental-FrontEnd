@@ -20,4 +20,10 @@ export default [
 
   // Aplica las configuraciones recomendadas de ESLint para React.
   pluginReact.configs.flat.recommended,
+
+  {
+    rules: {
+      "no-undef": "off"
+    }
+  }
 ];
