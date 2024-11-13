@@ -44,57 +44,57 @@ const Central = () => {
         };
     }, [getSimilarColors]);
 
-    const fetchData = () => {
-        fetch(`${API_URL}/stations?limit=1&measurements=true`, requestOptions)
-            .then(response => response.json())
-            .then(data => {
-                if (data) {
-                    const central = data.find(central => central.id === id);
-                    if (central) {
-                        const filteredMeasurements = [];
-
-                        Object.keys(central).forEach(key => {
-                            if (Array.isArray(central[key])) {
-                                central[key].forEach(measurement => {
-                                    filteredMeasurements.push(formatMeasurement({ ...measurement, key }));
-                                });
-                            }
-                        });
-                        const dateNow = new Date().toLocaleString("es-AR", {
-                            timeZone: "America/Argentina/Buenos_Aires",
-                            hour12: false
-                        });
-                        setDate(dateNow);
-                        setMeasurements(filteredMeasurements);
-
-                        // Actualizar el estado de las mediciones anteriores y el color del gauge si cambia el valor
-                        setPreviousMeasurements(prev => {
-                            const newPreviousMeasurements = { ...prev };
-                            const newGaugeColors = { ...gaugeColors };
-
-                            filteredMeasurements.forEach(measurement => {
-                                const previousValue = prev[measurement.key];
-                                newPreviousMeasurements[measurement.key] = measurement.value;
-
-                                if (previousValue !== measurement.value) {
-                                    const [colorMin, colorMax] = getSimilarColors();
-                                    newGaugeColors[measurement.key] = { colorMin, colorMax };
+    useEffect(() => {
+        const fetchData = () => {
+            fetch(`${API_URL}/stations?limit=1&measurements=true`, requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        const central = data.find(central => central.id === id);
+                        if (central) {
+                            const filteredMeasurements = [];
+    
+                            Object.keys(central).forEach(key => {
+                                if (Array.isArray(central[key])) {
+                                    central[key].forEach(measurement => {
+                                        filteredMeasurements.push(formatMeasurement({ ...measurement, key }));
+                                    });
                                 }
                             });
-
-                            setGaugeColors(newGaugeColors);
-                            return newPreviousMeasurements;
-                        });
+                            const dateNow = new Date().toLocaleString("es-AR", {
+                                timeZone: "America/Argentina/Buenos_Aires",
+                                hour12: false
+                            });
+                            setDate(dateNow);
+                            setMeasurements(filteredMeasurements);
+    
+                            // Actualizar el estado de las mediciones anteriores y el color del gauge si cambia el valor
+                            setPreviousMeasurements(prev => {
+                                const newPreviousMeasurements = { ...prev };
+                                const newGaugeColors = { ...gaugeColors };
+    
+                                filteredMeasurements.forEach(measurement => {
+                                    const previousValue = prev[measurement.key];
+                                    newPreviousMeasurements[measurement.key] = measurement.value;
+    
+                                    if (previousValue !== measurement.value) {
+                                        const [colorMin, colorMax] = getSimilarColors();
+                                        newGaugeColors[measurement.key] = { colorMin, colorMax };
+                                    }
+                                });
+    
+                                setGaugeColors(newGaugeColors);
+                                return newPreviousMeasurements;
+                            });
+                        }
                     }
-                }
-            })
-            .catch(error => console.error(error));
-    };
+                })
+                .catch(error => console.error(error));
+        };
 
-    useEffect(() => {
         const interval = setInterval(fetchData, 5000); // Ejecutar cada 5 segundos
         return () => clearInterval(interval); // Limpiar el intervalo al desmontar
-    }, [fetchData]);
+    }, [id, formatMeasurement, requestOptions, gaugeColors, getSimilarColors]);
 
     const renderMeasurement = (measurement) => {
         const colors = gaugeColors[measurement.key] || { colorMin: measurement.colorMin, colorMax: measurement.colorMax };
