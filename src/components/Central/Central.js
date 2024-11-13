@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Gauge from '../Gauge/Gauge';
+import { formatTypeAndUnit } from '../helpers';
 
 const Central = () => {
     const { id, name, location } = useParams();
     const [measurements, setMeasurements] = useState([]);
+    const [previousMeasurements, setPreviousMeasurements] = useState({});
     const [date, setDate] = useState('');
+    const [gaugeColors, setGaugeColors] = useState({});
 
     const requestOptions = useMemo(() => ({
         method: "GET",
@@ -21,63 +24,9 @@ const Central = () => {
     }, []);
 
     const formatMeasurement = useCallback((measurement) => {
-        let formattedType = measurement.key;
-        let units = '';
-        let min = 0;
-        let max = 100;
+        let type = measurement.key;
 
-        switch (formattedType.toLowerCase()) {
-            case 'co':
-                formattedType = 'Monóxido de Carbono (CO)';
-                units = 'ppm';
-                min = 0;
-                max = 50;
-                break;
-            case 'h2':
-                formattedType = 'Hidrógeno (H2)';
-                units = 'ppm';
-                min = 0;
-                max = 1000;
-                break;
-            case 'lpg':
-                formattedType = 'Gas Licuado de Petróleo (LPG)';
-                units = 'ppm';
-                min = 0;
-                max = 1000;
-                break;
-            case 'alcohol':
-                formattedType = 'Alcohol';
-                units = 'ppm';
-                min = 0;
-                max = 500;
-                break;
-            case 'ch4':
-                formattedType = 'Metano';
-                units = 'ppm';
-                min = 0;
-                max = 500;
-                break;
-            case 'propane':
-                formattedType = 'Propano';
-                units = 'ppm';
-                min = 0;
-                max = 1000;
-                break;
-            case 'temperature':
-                formattedType = 'Temperatura';
-                units = 'ºC';
-                min = -10;
-                max = 50;
-                break;
-            case 'humidity':
-                formattedType = 'Humedad';
-                units = '%';
-                min = 0;
-                max = 100;
-                break;
-            default:
-                units = '';
-        }
+        const { formattedType, units, min, max } = formatTypeAndUnit(type);
 
         const [colorMin, colorMax] = getSimilarColors();
 
@@ -117,6 +66,25 @@ const Central = () => {
                             });
                             setDate(dateNow);
                             setMeasurements(filteredMeasurements);
+
+                            // Actualizar el estado de las mediciones anteriores y el color del gauge si cambia el valor
+                            setPreviousMeasurements(prev => {
+                                const newPreviousMeasurements = { ...prev };
+                                const newGaugeColors = { ...gaugeColors };
+
+                                filteredMeasurements.forEach(measurement => {
+                                    const previousValue = prev[measurement.key];
+                                    newPreviousMeasurements[measurement.key] = measurement.value;
+
+                                    if (previousValue !== measurement.value) {
+                                        const [colorMin, colorMax] = getSimilarColors();
+                                        newGaugeColors[measurement.key] = { colorMin, colorMax };
+                                    }
+                                });
+
+                                setGaugeColors(newGaugeColors);
+                                return newPreviousMeasurements;
+                            });
                         }
                     }
                 })
@@ -127,7 +95,32 @@ const Central = () => {
         const interval = setInterval(fetchData, 3000);
 
         return () => clearInterval(interval);
-    }, [id, requestOptions, formatMeasurement]);
+    }, [id, requestOptions, formatMeasurement, gaugeColors]);
+
+    const renderMeasurement = (measurement) => {
+        const colors = gaugeColors[measurement.key] || { colorMin: measurement.colorMin, colorMax: measurement.colorMax };
+
+        return (
+            <div key={measurement.type} className="item">
+                <Gauge
+                    key={measurement.type}
+                    value={measurement.value}
+                    min={measurement.min}
+                    max={measurement.max}
+                    label={measurement.type}
+                    units={measurement.units}
+                    colorMin={colors.colorMin}
+                    colorMax={colors.colorMax}
+                />
+                <Link
+                    to={`/central/${id}/${name}/${location}/readings/${measurement.key}`}
+                    className="btn"
+                >
+                    Ver Detalles
+                </Link>
+            </div>
+        );
+    };
 
     if (measurements.length === 0) {
         return (
@@ -152,26 +145,7 @@ const Central = () => {
                 </div>
 
                 <div className="container">
-                    {measurements.map((measurement) => (
-                        <div key={measurement.type} className="item">
-                            <Gauge
-                                key={measurement.type}
-                                value={measurement.value}
-                                min={measurement.min}
-                                max={measurement.max}
-                                label={measurement.type}
-                                units={measurement.units}
-                                colorMin={measurement.colorMin}
-                                colorMax={measurement.colorMax}
-                            />
-                            <Link
-                                to={`/central/${id}/${name}/${location}/readings/${measurement.key}`}
-                                className="btn"
-                            >
-                                Ver Detalles
-                            </Link>
-                        </div>
-                    ))}
+                    {measurements.map((measurement) => renderMeasurement(measurement))}
                 </div>
             </div>
         </div>

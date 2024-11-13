@@ -1,71 +1,37 @@
-# Getting Started with Create React App
+# FrontEnd - APP Web React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+La aplicación web para el monitoreo de gases y condiciones ambientales está construida utilizando **React**, una de las bibliotecas de JavaScript más populares para crear interfaces de usuario dinámicas y reactivas. Para optimizar el proceso de desarrollo, utilizamos **Vite.js** como herramienta de construcción. Esto permite una experiencia de desarrollo más rápida y eficiente gracias a un servidor optimizado y la carga de módulos en tiempo real.
 
-## Available Scripts
+La aplicación está diseñada como una **SPA (Single Page Application)**, lo que significa que carga una única página HTML en el navegador. A medida que el usuario interactúa, el contenido se actualiza dinámicamente en esa misma página, sin necesidad de recargar toda la página. Esto mejora considerablemente la velocidad de la aplicación, brindando una experiencia de usuario más fluida y similar a la de una aplicación de escritorio, y optimizando su funcionamiento tanto en dispositivos de escritorio como móviles.
 
-In the project directory, you can run:
+### Características Principales
+
+- **Monitoreo en tiempo real**: Visualiza las lecturas de gases, temperatura y humedad en tiempo real.
+- **Historial de lecturas**: Accede a gráficos que muestran los niveles históricos de los parámetros monitoreados.
+- **Exportación de datos**: Exporta los registros de lecturas en formato Excel para su análisis fuera de la aplicación.
+
+### Despliegue en Netlify
+
+La aplicación está desplegada en **Netlify**, una plataforma que facilita el alojamiento y despliegue de aplicaciones web estáticas. Con Netlify, la implementación continua, la optimización automática y la integración con GitHub permiten una administración eficiente del flujo de trabajo, garantizando que cualquier cambio en el código se refleje inmediatamente en el entorno de producción.
+
+### Documentación y Recursos
+
+- [Documentación Oficial de React](https://reactjs.org/docs/getting-started.html)
+- [Documentación Oficial de Netlify](https://docs.netlify.com/)
+- [Aplicación Web Monitor Ambiental](https://monitor-ambiental.netlify.app)
+
+## Scripts Disponibles
+
+En el directorio del proyecto, puedes ejecutar los siguientes comandos:
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Inicia la aplicación en modo desarrollo. Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver la aplicación en acción. Los cambios realizados en el código se reflejarán automáticamente sin necesidad de recargar la página.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Genera una versión optimizada de la aplicación para producción en la carpeta `build`. Este comando asegura que la aplicación esté lista para ser desplegada en un servidor de producción, con el mejor rendimiento posible.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `npm test`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# monitor-gases-FrontEnd
+Ejecuta el conjunto de pruebas configurado en el proyecto para asegurarse de que las funcionalidades de la aplicación estén funcionando correctamente.

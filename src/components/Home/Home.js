@@ -9,13 +9,40 @@ const requestOptions = {
 function Home() {
 
     const [centrales, setCentrales] = useState([]);
+    const [lastMeasurements, setLastMeasurements] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("https://monitor-de-gases-back.onrender.com/stations", requestOptions)
+        fetch("https://monitor-de-gases-back.onrender.com/stations?measurements=true&limit=1", requestOptions)
         .then((response) => response.json())
-        .then((result) => setCentrales(result))
-        .catch((error) => console.error(error));
-    },[]);
+        .then((result) => {
+            setCentrales(result);
+
+            // Obtener las mediciones de temperatura y sus fechas
+            const latestMeasurements = result.map(station => {
+                const temperatureMeasurement = station.temperature ? station.temperature[0] : null;
+                return temperatureMeasurement ? { ...temperatureMeasurement, stationId: station.id } : null;
+            }).filter(measurement => measurement !== null);
+
+            // Obtener la fecha y hora actual
+            const now = new Date();
+
+            // Filtrar las mediciones que tienen una diferencia máxima de 5 minutos con la fecha actual
+            const validMeasurements = latestMeasurements.filter(measurement => {
+                const measurementDate = new Date(measurement.creation_date);
+                const diffInMinutes = (now - measurementDate) / (1000 * 60);
+                return diffInMinutes <= 1;
+            });
+
+            setLastMeasurements(validMeasurements);
+            setLoading(false); // Finalizar la carga
+        })
+        .catch((error) => {
+            console.error(error);
+            setLoading(true); // Finalizar la carga en caso de error
+        });
+    }, []);
+
 
     return (
         <div className="home-container">
@@ -42,12 +69,17 @@ function Home() {
                         <p>Selecciona una central para ver los detalles de las lecturas en tiempo real.</p>
 
                         <div className="centrales-list">
-                            { centrales.length !== 0 ? 
+                            { loading === false ? 
                                 centrales.map((central) => (
                                 <div key={central.id} className="item">
                                     <h3>{central.name}</h3>
                                     <p> <strong>Ubicación:</strong> {central.location}</p>
                                     <Link to={`/central/${central.id}/${central.name}/${central.location}`} className="btn">Ver Detalles</Link>
+                                    {lastMeasurements.some(measurement => measurement.stationId === central.id) ? (
+                                        <b style={{ color: 'green' }}>Online</b>
+                                    ) : (
+                                        <b style={{ color: 'red' }}>Offline</b>
+                                    )}
                                 </div>
                             ))
                             :  <div className='loader-container'>
