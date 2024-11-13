@@ -1,17 +1,9 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import {
-    ResponsiveContainer,
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip
-} from 'recharts';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import * as XLSX from 'xlsx';
-import { formatTypeAndUnit } from '../helpers';
+import { API_URL, formatTypeAndUnit } from '../helpers';
 import GasLevelsTable from '../GasLevelsTable/GasLevelsTable';
 
 import {
@@ -43,6 +35,7 @@ const Readings = () => {
     const [unit, setUnit] = useState('');
     const [formattedType, setFormattedType] = useState('');
     const [yDomain, setYDomain] = useState([0, 1000]); // Rango por defecto
+    const [loading, setLoading] = useState(true);
 
     const requestOptions = useMemo(() => ({ method: "GET", redirect: "follow" }), []);
 
@@ -51,36 +44,40 @@ const Readings = () => {
         setFormattedType(formattedType);
         setUnit(units);
 
-        fetch(`https://monitor-de-gases-back.onrender.com/stations/${id}/measurement/${type}`, requestOptions)
+        fetch(`${API_URL}/stations/${id}/measurement/${type}`, requestOptions)
             .then((response) => response.json())
             .then((result) => {
                 const now = new Date();
-                const threeHoursAgo = new Date(now.getTime() - 3 * 60 * 60 * 1000);
+                const threeHoursAgo = new Date(now.getTime() - 12 * 60 * 60 * 1000);
 
                 const filteredData = result.filter(item => {
                     const itemDate = new Date(item.creation_date);
                     return itemDate >= threeHoursAgo;
                 });
 
-                const formattedData = filteredData.map(item => {
-                    return {
-                        date: new Date(item.creation_date).toLocaleTimeString('es-AR', { hour12: false }),
-                        value: item.value,
-                        unit: units
-                    };
-                });
+                const formattedData = filteredData.map(item => ({
+                    date: new Date(item.creation_date).toLocaleTimeString('es-AR', { hour12: false }),
+                    value: item.value,
+                    unit: units
+                }));
 
                 // Establecer los valores mínimos y máximos para Y
                 const values = formattedData.map(item => item.value);
-                const minValue = Math.min(...values);
-                const maxValue = Math.max(...values);
-
-                // Actualizar el dominio del eje Y
-                setYDomain([minValue, maxValue]);
+                if (values.length > 0) {
+                    const minValue = Math.min(...values);
+                    const maxValue = Math.max(...values);
+                    setYDomain([minValue, maxValue]);
+                } else {
+                    setYDomain([0, 1000]); // Rango por defecto si no hay valores
+                }
 
                 setData(formattedData);
+                setLoading(false); // Finalizar la carga
             })
-            .catch((error) => console.error(error));
+            .catch((error) => {
+                console.error(error);
+                setLoading(false); // Finalizar la carga en caso de error
+            });
     }, [id, type, requestOptions]);
 
     const exportToExcel = () => {
@@ -92,7 +89,7 @@ const Readings = () => {
         XLSX.writeFile(workbook, `readings_${type}.xlsx`);
     };
 
-    if (data.length === 0) {
+    if (loading) {
         return (
             <div className='loader-container'>
                 <div className="loader">
@@ -112,29 +109,27 @@ const Readings = () => {
                 <Button onClick={exportToExcel}>Exportar a Excel</Button>
 
                 {/* Gráfica */}
-                <div className="chart-container">
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart
-                            data={data}
-                            margin={{
-                                top: 5,
-                                right: 30,
-                                left: 20,
-                                bottom: 5
-                            }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date" reversed={true} />
-                            <YAxis
-                                domain={yDomain}  // Usar el dominio dinámico de Y
-                                unit={unit}
-                            />
-                            <Tooltip />
-                            <Line type="monotone" dataKey="value" stroke="#8884d8" />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
-
+                {data.length > 0 ? (
+                    <div className="chart-container">
+                        <ResponsiveContainer width="100%" height={300}>
+                            <LineChart
+                                data={data}
+                                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="date" reversed={true} />
+                                <YAxis
+                                    domain={yDomain}  // Usar el dominio dinámico de Y
+                                    unit={unit}
+                                />
+                                <Tooltip />
+                                <Line type="monotone" dataKey="value" stroke="#8884d8" />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                ) : (
+                    <p className="no-data-message">No hay datos disponibles en las últimas 3 horas.</p>
+                )}
             </div>
             <div className="table-container">
                 <GasLevelsTable levels={gasLevels[type]} unit={unit} gasName={formattedType} />

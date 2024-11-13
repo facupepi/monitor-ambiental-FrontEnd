@@ -233,6 +233,14 @@ html {
     margin-right: 20px;
 }
 
+.no-data-message {
+    color: #ff0000;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
 tspan{
     font-size: small;
 }

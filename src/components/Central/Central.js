@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Gauge from '../Gauge/Gauge';
-import { formatTypeAndUnit } from '../helpers';
+import { API_URL, formatTypeAndUnit } from '../helpers';
 
 const Central = () => {
     const { id, name, location } = useParams();
@@ -43,59 +43,57 @@ const Central = () => {
         };
     }, [getSimilarColors]);
 
-    useEffect(() => {
-        const fetchData = () => {
-            fetch(`https://monitor-de-gases-back.onrender.com/stations?limit=1&measurements=true`, requestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        const central = data.find(central => central.id === id);
-                        if (central) {
-                            const filteredMeasurements = [];
+    const fetchData = () => {
+        fetch(`${API_URL}/stations?limit=1&measurements=true`, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    const central = data.find(central => central.id === id);
+                    if (central) {
+                        const filteredMeasurements = [];
 
-                            Object.keys(central).forEach(key => {
-                                if (Array.isArray(central[key])) {
-                                    central[key].forEach(measurement => {
-                                        filteredMeasurements.push(formatMeasurement({ ...measurement, key }));
-                                    });
+                        Object.keys(central).forEach(key => {
+                            if (Array.isArray(central[key])) {
+                                central[key].forEach(measurement => {
+                                    filteredMeasurements.push(formatMeasurement({ ...measurement, key }));
+                                });
+                            }
+                        });
+                        const dateNow = new Date().toLocaleString("es-AR", {
+                            timeZone: "America/Argentina/Buenos_Aires",
+                            hour12: false
+                        });
+                        setDate(dateNow);
+                        setMeasurements(filteredMeasurements);
+
+                        // Actualizar el estado de las mediciones anteriores y el color del gauge si cambia el valor
+                        setPreviousMeasurements(prev => {
+                            const newPreviousMeasurements = { ...prev };
+                            const newGaugeColors = { ...gaugeColors };
+
+                            filteredMeasurements.forEach(measurement => {
+                                const previousValue = prev[measurement.key];
+                                newPreviousMeasurements[measurement.key] = measurement.value;
+
+                                if (previousValue !== measurement.value) {
+                                    const [colorMin, colorMax] = getSimilarColors();
+                                    newGaugeColors[measurement.key] = { colorMin, colorMax };
                                 }
                             });
-                            const dateNow = new Date().toLocaleString("es-AR", {
-                                timeZone: "America/Argentina/Buenos_Aires",
-                                hour12: false
-                            });
-                            setDate(dateNow);
-                            setMeasurements(filteredMeasurements);
 
-                            // Actualizar el estado de las mediciones anteriores y el color del gauge si cambia el valor
-                            setPreviousMeasurements(prev => {
-                                const newPreviousMeasurements = { ...prev };
-                                const newGaugeColors = { ...gaugeColors };
-
-                                filteredMeasurements.forEach(measurement => {
-                                    const previousValue = prev[measurement.key];
-                                    newPreviousMeasurements[measurement.key] = measurement.value;
-
-                                    if (previousValue !== measurement.value) {
-                                        const [colorMin, colorMax] = getSimilarColors();
-                                        newGaugeColors[measurement.key] = { colorMin, colorMax };
-                                    }
-                                });
-
-                                setGaugeColors(newGaugeColors);
-                                return newPreviousMeasurements;
-                            });
-                        }
+                            setGaugeColors(newGaugeColors);
+                            return newPreviousMeasurements;
+                        });
                     }
-                })
-                .catch(error => console.error(error));
-        };
+                }
+            })
+            .catch(error => console.error(error));
+    };
 
-        fetchData();
-        const interval = setInterval(fetchData, 3000);
-
-        return () => clearInterval(interval);
-    }, [id, requestOptions, formatMeasurement, gaugeColors]);
+    useEffect(() => {
+        const interval = setInterval(fetchData, 5000); // Ejecutar cada 5 segundos
+        return () => clearInterval(interval); // Limpiar el intervalo al desmontar
+    }, [fetchData]);
 
     const renderMeasurement = (measurement) => {
         const colors = gaugeColors[measurement.key] || { colorMin: measurement.colorMin, colorMax: measurement.colorMax };

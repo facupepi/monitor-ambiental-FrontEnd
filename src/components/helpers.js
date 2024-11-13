@@ -1,3 +1,5 @@
+const API_URL = 'https://monitor-de-gases-back-u0rx.onrender.com'
+
 const formatTypeAndUnit = (type) => {
     let formattedType = '';
     let units = '';
@@ -194,5 +196,6 @@ export {
     ch4,
     propane,
     temperature,
-    humidity
+    humidity,
+    API_URL
 };

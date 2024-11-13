@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
+import { API_URL } from "../helpers";
 
 const requestOptions = {
     method: "GET",
@@ -13,7 +14,7 @@ function Home() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("https://monitor-de-gases-back.onrender.com/stations?measurements=true&limit=1", requestOptions)
+        fetch(`${API_URL}/stations?measurements=true&limit=1`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
             setCentrales(result);
