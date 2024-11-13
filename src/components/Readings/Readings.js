@@ -48,7 +48,7 @@ const Readings = () => {
             .then((response) => response.json())
             .then((result) => {
                 const now = new Date();
-                const threeHoursAgo = new Date(now.getTime() - 12 * 60 * 60 * 1000);
+                const threeHoursAgo = new Date(now.getTime() - 3 * 60 * 60 * 1000);
 
                 const filteredData = result.filter(item => {
                     const itemDate = new Date(item.creation_date);
