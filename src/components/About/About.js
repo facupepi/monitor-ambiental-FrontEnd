@@ -13,11 +13,11 @@ function About() {
             <p>
                 Además de los gases peligrosos, la temperatura y la humedad del ambiente pueden influir en la combustión y, por ende, en la producción de estos gases tóxicos. Nuestro sistema incluye sensores inalámbricos para medir monóxido de carbono, hidrógeno, propano, LPG, metano, humo, y vapores de alcohol, además de sensores de temperatura y humedad para monitorear el entorno en tiempo real y advertir cuando las condiciones superen los límites seguros.
             </p>
-            <h2>Tecnología del Sistema</h2>
+            <h3>Tecnología del Sistema</h3>
             <p>
                 El sistema de monitoreo se basa en sensores conectados a un microcontrolador que transmite los datos a través de WiFi hacia la nube, almacenándose en una base de datos en Firebase Realtime Database. Nuestra <strong>API alojada en Render</strong> actúa como un puente para que los datos de los sensores puedan ser fácilmente accesibles desde cualquier aplicación cliente, como la interfaz web o aplicaciones móviles.
             </p>
-            <h2>Funcionalidades Clave</h2>
+            <h3>Funcionalidades Clave</h3>
             <ul>
                 <li>
                     <strong>Monitoreo de Gases Peligrosos:</strong> Detecta niveles inseguros de monóxido de carbono, hidrógeno, propano, LPG, metano, humo y alcohol.

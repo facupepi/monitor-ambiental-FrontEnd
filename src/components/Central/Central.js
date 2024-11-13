@@ -92,7 +92,7 @@ const Central = () => {
                 .catch(error => console.error(error));
         };
 
-        const interval = setInterval(fetchData, 5000); // Ejecutar cada 5 segundos
+        const interval = setInterval(fetchData, 2000); // Ejecutar cada 5 segundos
         return () => clearInterval(interval); // Limpiar el intervalo al desmontar
     }, [id, formatMeasurement, requestOptions, gaugeColors, getSimilarColors]);
 
